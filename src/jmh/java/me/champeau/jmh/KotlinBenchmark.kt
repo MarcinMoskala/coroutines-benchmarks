@@ -25,7 +25,7 @@ import kotlin.system.measureTimeMillis
 
 @Threads(1)
 @State(Scope.Benchmark)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode(Mode.AverageTime)
 open class KotlinBenchmark {
 
@@ -41,16 +41,20 @@ open class KotlinBenchmark {
         bh.consume(makeCoffee(orders, Dispatchers.Default, ::cpu2))
     }
 
-//    @Benchmark
-//    fun defaultBlocking(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, Dispatchers.Default, ::blocking))
-//    }
-//
-//    @Benchmark
-//    fun defaultSuspending(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, Dispatchers.Default, ::suspending))
-//
-//    }
+    @Benchmark
+    fun defaultMemory(bh: Blackhole) = runBlocking {
+        bh.consume(makeCoffee(orders, Dispatchers.Default, ::memory))
+    }
+
+    @Benchmark
+    fun defaultBlocking(bh: Blackhole) = runBlocking {
+        bh.consume(makeCoffee(orders, Dispatchers.Default, ::blocking))
+    }
+
+    @Benchmark
+    fun defaultSuspending(bh: Blackhole) = runBlocking {
+        bh.consume(makeCoffee(orders, Dispatchers.Default, ::suspending))
+    }
 
     @Benchmark
     fun e100ThreadsCpu1(bh: Blackhole, htd: HundredThreadDispatcher) = runBlocking {
@@ -62,15 +66,20 @@ open class KotlinBenchmark {
         bh.consume(makeCoffee(orders, htd.dispather, ::cpu2))
     }
 
-//    @Benchmark
-//    fun e100ThreadsBlocking(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, e100Threads, ::blocking))
-//    }
-//
-//    @Benchmark
-//    fun e100ThreadsSuspending(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, e100Threads, ::suspending))
-//    }
+    @Benchmark
+    fun e100ThreadsMemory(bh: Blackhole, htd: HundredThreadDispatcher) = runBlocking {
+        bh.consume(makeCoffee(orders, htd.dispather, ::memory))
+    }
+
+    @Benchmark
+    fun e100ThreadsBlocking(bh: Blackhole, htd: HundredThreadDispatcher) = runBlocking {
+        bh.consume(makeCoffee(orders, htd.dispather, ::blocking))
+    }
+
+    @Benchmark
+    fun e100ThreadsSuspending(bh: Blackhole, htd: HundredThreadDispatcher) = runBlocking {
+        bh.consume(makeCoffee(orders, htd.dispather, ::suspending))
+    }
 
     @Benchmark
     fun singleThreadCpu1(bh: Blackhole, std: SingleThreadDispatcher) = runBlocking {
@@ -82,15 +91,20 @@ open class KotlinBenchmark {
         bh.consume(makeCoffee(orders, std.dispather, ::cpu2))
     }
 
-//    @Benchmark
-//    fun singleThreadBlocking(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, singleThread, ::blocking))
-//    }
-//
-//    @Benchmark
-//    fun singleThreadSuspending(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, singleThread, ::suspending))
-//    }
+    @Benchmark
+    fun singleThreadMemory(bh: Blackhole, std: SingleThreadDispatcher) = runBlocking {
+        bh.consume(makeCoffee(orders, std.dispather, ::memory))
+    }
+
+    @Benchmark
+    fun singleThreadBlocking(bh: Blackhole, std: SingleThreadDispatcher) = runBlocking {
+        bh.consume(makeCoffee(orders, std.dispather, ::blocking))
+    }
+
+    @Benchmark
+    fun singleThreadSuspending(bh: Blackhole, std: SingleThreadDispatcher) = runBlocking {
+        bh.consume(makeCoffee(orders, std.dispather, ::suspending))
+    }
 
     @Benchmark
     fun ioCpu1(bh: Blackhole) = runBlocking {
@@ -102,15 +116,20 @@ open class KotlinBenchmark {
         bh.consume(makeCoffee(orders, Dispatchers.IO, ::cpu2))
     }
 
-//    @Benchmark
-//    fun ioBlocking(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, Dispatchers.IO, ::blocking))
-//    }
-//
-//    @Benchmark
-//    fun ioSuspending(bh: Blackhole) = runBlocking {
-//        bh.consume(makeCoffee(orders, Dispatchers.IO, ::suspending))
-//    }
+    @Benchmark
+    fun ioMemory(bh: Blackhole) = runBlocking {
+        bh.consume(makeCoffee(orders, Dispatchers.IO, ::memory))
+    }
+
+    @Benchmark
+    fun ioBlocking(bh: Blackhole) = runBlocking {
+        bh.consume(makeCoffee(orders, Dispatchers.IO, ::blocking))
+    }
+
+    @Benchmark
+    fun ioSuspending(bh: Blackhole) = runBlocking {
+        bh.consume(makeCoffee(orders, Dispatchers.IO, ::suspending))
+    }
 
     @State(Scope.Thread)
     open class SingleThreadDispatcher {
@@ -137,7 +156,7 @@ open class KotlinBenchmark {
 
         @Setup(Level.Trial)
         fun doSetup() {
-            executor = Executors.newSingleThreadExecutor()
+            executor = Executors.newFixedThreadPool(100)
             dispather = executor.asCoroutineDispatcher()
         }
 
@@ -171,13 +190,20 @@ fun cpu1(order: Order): Coffee {
 
 fun cpu2(order: Order): Coffee {
     var isPrime = true
-    for (numberToCheck in 1..13774) {
+    for (numberToCheck in 1..23774) {
         isPrime = true
         for (i in 1..numberToCheck) {
             if (numberToCheck % i == 0) isPrime = false
         }
     }
     return Coffee(order.copy(customer = order.customer + isPrime))
+}
+
+fun memory(order: Order): Coffee {
+    val list = List(1_000) { it }
+    val list2 = List(1_000) { list }
+    val list3 = List(1_000) { list2 }
+    return Coffee(order.copy(customer = order.customer + list3.hashCode()))
 }
 
 fun blocking(order: Order): Coffee {
@@ -188,9 +214,4 @@ fun blocking(order: Order): Coffee {
 suspend fun suspending(order: Order): Coffee {
     delay(1000)
     return Coffee(order)
-}
-
-fun main() {
-    measureTimeMillis { cpu1(Order("AAA")) }.let(::println)
-    measureTimeMillis { cpu2(Order("AAA")) }.let(::println)
 }
