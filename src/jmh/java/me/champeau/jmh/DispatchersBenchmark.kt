@@ -21,13 +21,12 @@ import org.openjdk.jmh.infra.Blackhole
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import kotlin.system.measureTimeMillis
 
 @Threads(1)
 @State(Scope.Benchmark)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode(Mode.AverageTime)
-open class KotlinBenchmark {
+open class DispatchersBenchmark {
 
     private val orders: List<Order> = List(100) { Order("Customer$it") }
 
