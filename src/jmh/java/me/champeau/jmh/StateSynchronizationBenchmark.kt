@@ -64,11 +64,11 @@ open class StateSynchronizationBenchmark {
 
     @Benchmark
     fun atomicTest(bh: Blackhole, m: MutexWrapper) = runBlocking {
-        var i = AtomicInteger()
+        val i = AtomicInteger()
         massiveRun {
             i.incrementAndGet()
         }
-        bh.consume(i)
+        bh.consume(i.get())
     }
 
     @State(Scope.Thread)
