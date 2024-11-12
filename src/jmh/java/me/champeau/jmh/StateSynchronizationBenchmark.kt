@@ -20,10 +20,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.openjdk.jmh.annotations.*
 import org.openjdk.jmh.infra.Blackhole
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 
 @Threads(1)
 @State(Scope.Benchmark)
@@ -32,13 +31,15 @@ import java.util.concurrent.atomic.AtomicInteger
 open class StateSynchronizationBenchmark {
 
     @Benchmark
-    fun synchronizedTest(bh: Blackhole) = runBlocking {
+    fun synchronizedTest(bh: Blackhole) = runBlocking(Dispatchers.Default) {
         var i = 0L
+        val lock = Any()
         massiveRun {
-            synchronized(this@StateSynchronizationBenchmark) {
+            synchronized(lock) {
                 i++
             }
         }
+        require(i == 1000 * 10_000L)
         bh.consume(i)
     }
 
@@ -48,27 +49,98 @@ open class StateSynchronizationBenchmark {
         massiveRun {
             i++
         }
+        require(i == 1000 * 10_000L)
         bh.consume(i)
     }
 
     @Benchmark
-    fun mutexTest(bh: Blackhole, m: MutexWrapper) = runBlocking {
+    fun limitedDispatcherSwitchingTest(bh: Blackhole, d: SingleThreadDispatcher) = runBlocking(Dispatchers.Default) {
+        var i = 0L
+        massiveRun {
+            withContext(d.dispather) {
+                i++
+            }
+        }
+        require(i == 1000 * 10_000L)
+        bh.consume(i)
+    }
+
+    @Benchmark
+    fun mutexTest(bh: Blackhole, m: MutexWrapper) = runBlocking(Dispatchers.Default) {
         var i = 0L
         massiveRun {
             m.mutex.withLock {
                 i++
             }
         }
+        require(i == 1000 * 10_000L)
         bh.consume(i)
     }
 
     @Benchmark
-    fun atomicTest(bh: Blackhole, m: MutexWrapper) = runBlocking {
-        val i = AtomicInteger()
+    fun atomicTest(bh: Blackhole, m: MutexWrapper) = runBlocking(Dispatchers.Default) {
+        val i = AtomicLong()
         massiveRun {
             i.incrementAndGet()
         }
+        require(i.get() == 1000 * 10_000L)
         bh.consume(i.get())
+    }
+
+    @Benchmark
+    fun mutableListSynchronizedTest(bh: Blackhole) = runBlocking(Dispatchers.Default) {
+        val list = mutableListOf<Int>()
+        massiveRun {
+            synchronized(this@StateSynchronizationBenchmark) {
+                list.add(it)
+            }
+        }
+        require(list.size == 1000 * 10_000)
+        bh.consume(list.toList())
+    }
+
+    @Benchmark
+    fun mutableListLimitedDispatcherTest(bh: Blackhole, d: SingleThreadDispatcher) = runBlocking(d.dispather) {
+        val list = mutableListOf<Int>()
+        massiveRun {
+            list.add(it)
+        }
+        require(list.size == 1000 * 10_000)
+        bh.consume(list.toList())
+    }
+
+    @Benchmark
+    fun mutableListLimitedDispatcherSwitchingTest(bh: Blackhole, d: SingleThreadDispatcher) = runBlocking(Dispatchers.Default) {
+        val list = mutableListOf<Int>()
+        massiveRun {
+            withContext(d.dispather) {
+                list.add(it)
+            }
+        }
+        require(list.size == 1000 * 10_000)
+        bh.consume(list.toList())
+    }
+
+    @Benchmark
+    fun mutableListMutexTest(bh: Blackhole, m: MutexWrapper) = runBlocking(Dispatchers.Default) {
+        val list = mutableListOf<Int>()
+        massiveRun {
+            m.mutex.withLock {
+                list.add(it)
+            }
+        }
+        require(list.size == 1000 * 10_000)
+        bh.consume(list.toList())
+    }
+
+    @Benchmark
+    fun mutableConcurrentListTest(bh: Blackhole, m: MutexWrapper) = runBlocking(Dispatchers.Default) {
+        val list = ConcurrentHashMap.newKeySet<Int>()
+        massiveRun {
+            list.add(it)
+        }
+        require(list.size == 1000 * 10_000)
+        bh.consume(list.toList())
     }
 
     @State(Scope.Thread)
@@ -92,11 +164,11 @@ open class StateSynchronizationBenchmark {
     }
 }
 
-private suspend fun massiveRun(action: suspend () -> Unit) =
+suspend fun massiveRun(repeats: Int = 10_000, action: suspend (Int) -> Unit) =
     coroutineScope {
-        repeat(10_000) {
+        repeat(1000) { i ->
             launch {
-                repeat(10_000) { action() }
+                repeat(repeats) { j -> action(i * 10_000 + j) }
             }
         }
     }

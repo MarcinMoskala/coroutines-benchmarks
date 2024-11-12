@@ -27,6 +27,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 }
 
 tasks.named('test') {
