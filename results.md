@@ -38,3 +38,52 @@ SynchronizedInMemoryIntRepositoryBenchmark.concurrentListAddingCopyingTest      
 SynchronizedInMemoryIntRepositoryBenchmark.mutexAddingCopyingTest                   avgt    5     349.517 ±   2.151  ms/op
 SynchronizedInMemoryIntRepositoryBenchmark.singleThreadDispatcherAddingCopyingTest  avgt    5     490.392 ±   6.174  ms/op
 SynchronizedInMemoryIntRepositoryBenchmark.synchronizedAddingCopyingTest            avgt    5     345.377 ±   2.073  ms/op
+
+Benchmark                                            Mode  Cnt    Score   Error  Units
+ReflectionBenchmark.atomicCounterCall                avgt    5   11.434 ± 0.271  ms/op
+ReflectionBenchmark.creatingSomeObjects              avgt    5   10.470 ± 0.076  ms/op
+ReflectionBenchmark.javaReflectionCall               avgt    5   18.760 ± 0.088  ms/op
+ReflectionBenchmark.kotlinReflectionCall             avgt    5   27.156 ± 0.084  ms/op
+ReflectionBenchmark.kotlinReflectionCallWithFinding  avgt    5  168.951 ± 0.618  ms/op
+ReflectionBenchmark.nullableValueIncrement           avgt    5    2.656 ± 0.014  ms/op
+ReflectionBenchmark.printingCounterCall              avgt    5   33.832 ± 3.976  ms/op
+ReflectionBenchmark.rawValueIncrement                avgt    5    1.190 ± 0.003  ms/op
+ReflectionBenchmark.regularCall                      avgt    5    1.933 ± 0.004  ms/op
+ReflectionBenchmark.simpleKotlinReflectionCall       avgt    5    1.932 ± 0.008  ms/op
+ReflectionBenchmark.suspendingCounterCall            avgt    5    8.702 ± 0.051  ms/op
+ReflectionBenchmark.synchronizedCounterCall          avgt    5    6.126 ± 0.015  ms/op
+
+Benchmark                                                                                 Mode  Cnt       Score        Error  Units
+
+StateSynchronizationBenchmark.atomicTest                                                  avgt    5   89147.587 ±   2735.044  ms/op
+StateSynchronizationBenchmark.limitedDispatcherSwitchingTest                              avgt    5   35829.685 ±    493.647  ms/op
+StateSynchronizationBenchmark.limitedDispatcherTest                                       avgt    5   31335.688 ±    446.908  ms/op
+StateSynchronizationBenchmark.mutableConcurrentListTest                                   avgt    5   88515.037 ±   2376.092  ms/op
+StateSynchronizationBenchmark.mutableListLimitedDispatcherSwitchingTest                   avgt    5   36585.304 ±   2217.502  ms/op
+StateSynchronizationBenchmark.mutableListLimitedDispatcherTest                            avgt    5   31225.302 ±    460.654  ms/op
+StateSynchronizationBenchmark.mutableListMutexTest                                        avgt    5   88557.738 ±   3882.534  ms/op
+StateSynchronizationBenchmark.mutableListSynchronizedTest                                 avgt    5   88516.026 ±   3508.984  ms/op
+StateSynchronizationBenchmark.mutexTest                                                   avgt    5   89236.719 ±   1348.985  ms/op
+StateSynchronizationBenchmark.synchronizedTest                                            avgt    5   86731.925 ±   4975.708  ms/op
+
+IntensiveStateSynchronizationBenchmark.atomicTest                                         avgt    5    2832.112 ±    196.996  ms/op
+IntensiveStateSynchronizationBenchmark.limitedDispatcherSwitchingTest                     avgt    5    5401.301 ±     87.113  ms/op
+IntensiveStateSynchronizationBenchmark.limitedDispatcherTest                              avgt    5   19012.654 ±      9.853  ms/op
+IntensiveStateSynchronizationBenchmark.mutableConcurrentListTest                          avgt    5    3246.021 ±    134.619  ms/op
+IntensiveStateSynchronizationBenchmark.mutableListLimitedDispatcherSwitchingTest          avgt    5    5922.295 ±    153.705  ms/op
+IntensiveStateSynchronizationBenchmark.mutableListLimitedDispatcherTest                   avgt    5   22603.618 ±    279.370  ms/op
+IntensiveStateSynchronizationBenchmark.mutableListMutexTest                               avgt    5   31140.457 ±     95.938  ms/op
+IntensiveStateSynchronizationBenchmark.mutableListSynchronizedTest                        avgt    5    5584.796 ±     99.348  ms/op
+IntensiveStateSynchronizationBenchmark.mutexTest                                          avgt    5   23054.441 ±    195.002  ms/op
+IntensiveStateSynchronizationBenchmark.synchronizedTest                                   avgt    5    4612.818 ±     65.770  ms/op
+
+SynchronizedInMemoryIntRepositoryBenchmark.concurrentListAddingCopyingTest                avgt    5     106.754 ±      0.592  ms/op
+SynchronizedInMemoryIntRepositoryBenchmark.mutexAddingCopyingTest                         avgt    5     339.988 ±      1.706  ms/op
+SynchronizedInMemoryIntRepositoryBenchmark.synchronizedAddingCopyingTest                  avgt    5     345.740 ±      1.695  ms/op
+SynchronizedInMemoryIntRepositoryBenchmark.singleThreadDispatcherAddingCopyingTest        avgt    5     494.463 ±      2.548  ms/op
+
+SynchronizedInMemoryIntRepositoryBenchmark.singleConcurrentListAddingCopyingTest          avgt    5  121029.155 ±    677.007  ms/op
+SynchronizedInMemoryIntRepositoryBenchmark.singleMutexAddingCopyingTest                   avgt    5  409722.384 ±  67867.809  ms/op
+SynchronizedInMemoryIntRepositoryBenchmark.singleSynchronizedAddingCopyingTest            avgt    5  407318.674 ± 106984.981  ms/op
+SynchronizedInMemoryIntRepositoryBenchmark.singleSingleThreadDispatcherAddingCopyingTest  avgt    5  368568.158 ± 519639.495  ms/op
+

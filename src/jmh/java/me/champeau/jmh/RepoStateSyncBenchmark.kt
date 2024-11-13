@@ -1,9 +1,7 @@
 package me.champeau.jmh
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import org.openjdk.jmh.annotations.*
 import org.openjdk.jmh.infra.Blackhole
 import java.util.concurrent.ConcurrentHashMap
@@ -22,6 +20,17 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
                 repo.set("key$it", it)
             }
             massiveRun(1) {
+                bh.consume(repo.getAll())
+            }
+        }
+
+    @Benchmark
+    fun singleSynchronizedAddingCopyingTest(bh: Blackhole, repo: SynchronizedInMemoryIntRepository) =
+        runBlocking {
+            repeat(1_000_000) {
+                repo.set("key$it", it)
+            }
+            repeat(10_000) {
                 bh.consume(repo.getAll())
             }
         }
@@ -46,6 +55,17 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
                 repo.set("key$it", it)
             }
             massiveRun(1) {
+                bh.consume(repo.getAll())
+            }
+        }
+
+    @Benchmark
+    fun singleMutexAddingCopyingTest(bh: Blackhole, repo: MutexInMemoryIntRepository) =
+        runBlocking {
+            repeat(1_000_000) {
+                repo.set("key$it", it)
+            }
+            repeat(10_000) {
                 bh.consume(repo.getAll())
             }
         }
@@ -75,6 +95,17 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
             }
         }
 
+    @Benchmark
+    fun singleSingleThreadDispatcherAddingCopyingTest(bh: Blackhole, repo: SingleThreadDispatcherInMemoryIntRepository) =
+        runBlocking {
+            repeat(1_000_000) {
+                repo.set("key$it", it)
+            }
+            repeat(10_000) {
+                bh.consume(repo.getAll())
+            }
+        }
+
     @State(Scope.Thread)
     open class SingleThreadDispatcherInMemoryIntRepository {
         private val values = mutableMapOf<String, Int>()
@@ -100,6 +131,17 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
             }
         }
 
+    @Benchmark
+    fun singleConcurrentListAddingCopyingTest(bh: Blackhole, repo: ConcurrentListInMemoryIntRepository) =
+        runBlocking {
+            repeat(1_000_000) {
+                repo.set("key$it", it)
+            }
+            repeat(10_000) {
+                bh.consume(repo.getAll())
+            }
+        }
+
     @State(Scope.Thread)
     open class ConcurrentListInMemoryIntRepository {
         private val values = ConcurrentHashMap<String, Int>()
@@ -113,3 +155,12 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
         }
     }
 }
+
+suspend private fun massiveRun(repeats: Int = 10_000, action: suspend (Int) -> Unit) =
+    coroutineScope {
+        repeat(1000) { i ->
+            launch {
+                repeat(repeats) { j -> action(i * 10_000 + j) }
+            }
+        }
+    }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014-2021 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.champeau.jmh
 
 import kotlinx.coroutines.*
@@ -13,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong
 @State(Scope.Benchmark)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode(Mode.AverageTime)
-open class StateSynchronizationBenchmark {
+open class IntensiveStateSynchronizationBenchmark {
 
     @Benchmark
     fun synchronizedTest(bh: Blackhole) = runBlocking(Dispatchers.Default) {
@@ -77,7 +92,7 @@ open class StateSynchronizationBenchmark {
     fun mutableListSynchronizedTest(bh: Blackhole) = runBlocking(Dispatchers.Default) {
         val list = mutableListOf<Int>()
         massiveRun {
-            synchronized(this@StateSynchronizationBenchmark) {
+            synchronized(this@IntensiveStateSynchronizationBenchmark) {
                 list.add(it)
             }
         }
@@ -151,14 +166,18 @@ open class StateSynchronizationBenchmark {
     }
 }
 
+private val list = List(100) { it }.shuffled()
+
+private fun intensiveComputation() = list.sorted()
+
 private suspend fun massiveRun(repeats: Int = 10_000, action: suspend (Int) -> Unit) =
     coroutineScope {
         repeat(1000) { i ->
+            intensiveComputation()
             launch {
                 repeat(repeats) { j ->
-                    delay(1)
+                    intensiveComputation()
                     action(i * 10_000 + j)
-                    delay(1)
                 }
             }
         }
