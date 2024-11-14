@@ -15,14 +15,14 @@ open class ReflectionBenchmark {
     open class Counter {
         var value = 0
 
-        fun increment() {
-            value++
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun increment() = value++
+        
 
-        fun decrement() {
-            value--
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun decrement() = value--
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun get() = value
     }
     
@@ -32,19 +32,12 @@ open class ReflectionBenchmark {
             (Counter::increment)(counter)
             (Counter::decrement)(counter)
             (Counter::increment)(counter)
-            bh.consume((Counter::get)(counter))
+            (Counter::get)(counter)
         }
+        bh.consume(counter)
     }
 
-    @Benchmark
-    fun creatingSomeObjects(bh: Blackhole, counter: Counter) {
-        repeat(1_000_000) {
-            bh.consume(Any())
-            bh.consume(Any())
-            bh.consume(Any())
-            bh.consume(Any())
-        }
-    }
+
 
     @Benchmark
     fun rawValueIncrement(bh: Blackhole, counter: Counter) {
@@ -53,8 +46,9 @@ open class ReflectionBenchmark {
             counter++
             counter--
             counter++
-            bh.consume(counter)
+            counter
         }
+        bh.consume(counter)
     }
 
     @Benchmark
@@ -64,8 +58,9 @@ open class ReflectionBenchmark {
             counter = counter?.inc()
             counter = counter?.dec()
             counter = counter?.inc()
-            bh.consume(counter)
+            counter
         }
+        bh.consume(counter)
     }
 
     @Benchmark
@@ -74,8 +69,9 @@ open class ReflectionBenchmark {
             counter.increment()
             counter.decrement()
             counter.increment()
-            bh.consume(counter.get())
+            counter.get()
         }
+        bh.consume(counter)
     }
 
     @Benchmark
@@ -87,8 +83,9 @@ open class ReflectionBenchmark {
             increment.invoke(counter)
             decrement.invoke(counter)
             increment.invoke(counter)
-            bh.consume(get.invoke(counter))
+            get.invoke(counter)
         }
+        bh.consume(counter)
     }
 
     @Benchmark
@@ -100,8 +97,9 @@ open class ReflectionBenchmark {
             increment.call(counter)
             decrement.call(counter)
             increment.call(counter)
-            bh.consume(get.call(counter))
+            get.call(counter)
         }
+        bh.consume(counter)
     }
 
     @Benchmark
@@ -110,22 +108,26 @@ open class ReflectionBenchmark {
             Counter::class.members.first { it.name == "increment" }.call(counter)
             Counter::class.members.first { it.name == "decrement" }.call(counter)
             Counter::class.members.first { it.name == "increment" }.call(counter)
-            bh.consume(Counter::class.members.first { it.name == "get" }.call(counter))
+            Counter::class.members.first { it.name == "get" }.call(counter)
         }
+        bh.consume(counter)
     }
     
     @State(Scope.Thread)
     open class SynchronizedCounter {
         var value = 0
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun increment() = synchronized(this) {
             value++
         }
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun decrement() = synchronized(this) {
             value--
         }
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun get() = synchronized(this) { value }
     }
     
@@ -135,22 +137,22 @@ open class ReflectionBenchmark {
             counter.increment()
             counter.decrement()
             counter.increment()
-            bh.consume(counter.get())
+            counter.get()
         }
+        bh.consume(counter)
     }
     
     @State(Scope.Thread)
     open class AtomicCounter {
         var value = AtomicInteger(0)
 
-        fun increment() {
-            value.incrementAndGet()
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun increment() = value.incrementAndGet()
 
-        fun decrement() {
-            value.decrementAndGet()
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun decrement() = value.decrementAndGet()
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun get() = value
     }
     
@@ -160,27 +162,31 @@ open class ReflectionBenchmark {
             counter.increment()
             counter.decrement()
             counter.increment()
-            bh.consume(counter.get())
+            counter.get()
         }
+        bh.consume(counter)
     }
     
     @State(Scope.Thread)
     open class PrintingCounter {
         var value = 0
 
-        fun increment() {
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun increment(): Int {
             print("I")
-            value++
+            return value++
         }
 
-        fun decrement() {
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun decrement(): Int {
             print("D")
-            value--
+            return value--
         }
 
-        fun get() {
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun get(): Int {
             print("G")
-            value
+            return value
         }
     }
     
@@ -190,25 +196,23 @@ open class ReflectionBenchmark {
             counter.increment()
             counter.decrement()
             counter.increment()
-            bh.consume(counter.get())
+            counter.get()
         }
+        bh.consume(counter)
     }
     
     @State(Scope.Thread)
     open class SuspendingCounter {
         var value = 0
 
-        suspend fun increment() {
-            value++
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        suspend fun increment() = value++
 
-        suspend fun decrement() {
-            value--
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        suspend fun decrement() = value--
 
-        suspend fun get() {
-            value
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        suspend fun get() = value
     }
     
     @Benchmark
@@ -217,7 +221,8 @@ open class ReflectionBenchmark {
             counter.increment()
             counter.decrement()
             counter.increment()
-            bh.consume(counter.get())
+            counter.get()
         }
+        bh.consume(counter)
     }
 }

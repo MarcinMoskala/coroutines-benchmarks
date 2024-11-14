@@ -156,9 +156,7 @@ private suspend fun massiveRun(repeats: Int = 10_000, action: suspend (Int) -> U
         repeat(1000) { i ->
             launch {
                 repeat(repeats) { j ->
-                    delay(1)
                     action(i * 10_000 + j)
-                    delay(1)
                 }
             }
         }
