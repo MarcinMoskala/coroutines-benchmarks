@@ -526,7 +526,7 @@ open class CompanyDetailsRepositoryBenchmark {
 
         override suspend fun getDetailsOrNull(company: Company): CompanyDetails? = details[company]
 
-        override suspend fun getReadyDetails(): Map<Company, CompanyDetails> = details.toMap()
+        override suspend fun getReadyDetails(): Map<Company, CompanyDetails> = details
 
         override suspend fun setAllDetails(details: Map<Company, CompanyDetails>) {
             this.details = details
