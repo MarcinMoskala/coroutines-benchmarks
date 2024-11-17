@@ -1,73 +1,92 @@
-Benchmark                                                                           Mode  Cnt       Score     Error  Units
-DispatchersBenchmark.singleThreadCpu1                                               avgt    5   17154.691 ± 115.264  ms/op
-DispatchersBenchmark.defaultCpu1                                                    avgt    5    2403.241 ±  33.099  ms/op
-DispatchersBenchmark.ioCpu1                                                         avgt    5    2321.450 ±  15.039  ms/op
-DispatchersBenchmark.ioCpu2                                                         avgt    5    3024.497 ±  27.987  ms/op
-
-DispatchersBenchmark.singleThreadCpu2                                               avgt    5   19246.087 ±  53.942  ms/op
-DispatchersBenchmark.defaultCpu2                                                    avgt    5    3085.273 ±  60.304  ms/op
-DispatchersBenchmark.e100ThreadsCpu1                                                avgt    5    8751.729 ±  62.195  ms/op
-DispatchersBenchmark.e100ThreadsCpu2                                                avgt    5    2786.834 ±  10.048  ms/op
-
-DispatchersBenchmark.singleThreadMemory                                             avgt    5   91788.703 ± 149.017  ms/op
-DispatchersBenchmark.defaultMemory                                                  avgt    5   11933.001 ± 242.976  ms/op
-DispatchersBenchmark.ioMemory                                                       avgt    5   11792.620 ± 135.959  ms/op
-DispatchersBenchmark.e100ThreadsMemory                                              avgt    5   11746.435 ±  32.588  ms/op
-
-DispatchersBenchmark.singleThreadBlocking                                           avgt    5  100462.012 ± 553.411  ms/op
-DispatchersBenchmark.defaultBlocking                                                avgt    5   10041.818 ±   9.982  ms/op
-DispatchersBenchmark.ioBlocking                                                     avgt    5    2017.396 ±   2.695  ms/op
-DispatchersBenchmark.e100ThreadsBlocking                                            avgt    5    1011.665 ±   1.129  ms/op
-
-DispatchersBenchmark.singleThreadSuspending                                         avgt    5    1007.943 ±   3.300  ms/op
-DispatchersBenchmark.defaultSuspending                                              avgt    5    1008.120 ±   4.856  ms/op
-DispatchersBenchmark.ioSuspending                                                   avgt    5    1008.363 ±   1.711  ms/op
-DispatchersBenchmark.e100ThreadsSuspending                                          avgt    5    1007.365 ±   3.836  ms/op
-
-
-Benchmark                                                                           Mode  Cnt       Score     Error  Units
-ReflectionBenchmark.javaReflectionCall                                              avgt    5      18.214 ±   0.143  ms/op
-ReflectionBenchmark.kotlinReflectionCall                                            avgt    5      28.400 ±   0.067  ms/op
-ReflectionBenchmark.kotlinReflectionCallWithFinding                                 avgt    5     172.664 ±   8.176  ms/op
-ReflectionBenchmark.regularCall                                                     avgt    5       1.950 ±   0.023  ms/op
-ReflectionBenchmark.simpleKotlinReflectionCall                                      avgt    5       1.939 ±   0.008  ms/op
-
-
-Benchmark                                            Mode  Cnt    Score   Error  Units
-ReflectionBenchmark.atomicCounterCall                avgt    5   11.434 ± 0.271  ms/op
-ReflectionBenchmark.creatingSomeObjects              avgt    5   10.470 ± 0.076  ms/op
-ReflectionBenchmark.javaReflectionCall               avgt    5   18.760 ± 0.088  ms/op
-ReflectionBenchmark.kotlinReflectionCall             avgt    5   27.156 ± 0.084  ms/op
-ReflectionBenchmark.kotlinReflectionCallWithFinding  avgt    5  168.951 ± 0.618  ms/op
-ReflectionBenchmark.nullableValueIncrement           avgt    5    2.656 ± 0.014  ms/op
-ReflectionBenchmark.printingCounterCall              avgt    5   33.832 ± 3.976  ms/op
-ReflectionBenchmark.rawValueIncrement                avgt    5    1.190 ± 0.003  ms/op
-ReflectionBenchmark.regularCall                      avgt    5    1.933 ± 0.004  ms/op
-ReflectionBenchmark.simpleKotlinReflectionCall       avgt    5    1.932 ± 0.008  ms/op
-ReflectionBenchmark.suspendingCounterCall            avgt    5    8.702 ± 0.051  ms/op
-ReflectionBenchmark.synchronizedCounterCall          avgt    5    6.126 ± 0.015  ms/op
-
-Benchmark                                                                                 Mode  Cnt       Score        Error  Units
-
-StateSynchronizationBenchmark.atomicTest                                            avgt    5     660.510 ±  50.737  ms/op
-StateSynchronizationBenchmark.limitedDispatcherSwitchingTest                        avgt    5    4742.988 ± 224.226  ms/op
-StateSynchronizationBenchmark.limitedDispatcherTest                                 avgt    5      20.037 ±   0.121  ms/op
-StateSynchronizationBenchmark.mutexTest                                             avgt    5    1532.737 ±  17.109  ms/op
-StateSynchronizationBenchmark.synchronizedTest                                      avgt    5     272.305 ±   8.458  ms/op
-
-StateSynchronizationBenchmark.mutableConcurrentListTest                             avgt    5     528.268 ± 140.613  ms/op
-StateSynchronizationBenchmark.mutableListLimitedDispatcherSwitchingTest             avgt    5    4975.630 ± 279.247  ms/op
-StateSynchronizationBenchmark.mutableListLimitedDispatcherTest                      avgt    5     217.192 ±  12.758  ms/op
-StateSynchronizationBenchmark.mutableListMutexTest                                  avgt    5    1906.811 ±  54.272  ms/op
-StateSynchronizationBenchmark.mutableListSynchronizedTest                           avgt    5     458.582 ± 128.718  ms/op
-
-SynchronizedInMemoryIntRepositoryBenchmark.concurrentListAddingCopyingTest                avgt    5     106.754 ±      0.592  ms/op
-SynchronizedInMemoryIntRepositoryBenchmark.mutexAddingCopyingTest                         avgt    5     339.988 ±      1.706  ms/op
-SynchronizedInMemoryIntRepositoryBenchmark.synchronizedAddingCopyingTest                  avgt    5     345.740 ±      1.695  ms/op
-SynchronizedInMemoryIntRepositoryBenchmark.singleThreadDispatcherAddingCopyingTest        avgt    5     494.463 ±      2.548  ms/op
-
-SynchronizedInMemoryIntRepositoryBenchmark.singleConcurrentListAddingCopyingTest          avgt    5  121029.155 ±    677.007  ms/op
-SynchronizedInMemoryIntRepositoryBenchmark.singleMutexAddingCopyingTest                   avgt    5  409722.384 ±  67867.809  ms/op
-SynchronizedInMemoryIntRepositoryBenchmark.singleSynchronizedAddingCopyingTest            avgt    5  407318.674 ± 106984.981  ms/op
-SynchronizedInMemoryIntRepositoryBenchmark.singleSingleThreadDispatcherAddingCopyingTest  avgt    5  368568.158 ± 519639.495  ms/op
-
+Benchmark                                                                                       Mode  Cnt       Score       Error  Units
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailCached                                     avgt    5       2.737 ±     1.925  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailConcurrentMap                              avgt    5       2.003 ±     0.379  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailMutex                                      avgt    5      11.646 ±     1.264  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailMutexReadOnlyMap                           avgt    5       2.212 ±     0.376  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullCached                               avgt    5      19.052 ±     1.954  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullConcurrentMap                        avgt    5       6.792 ±     0.533  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullMutex                                avgt    5      28.432 ±    10.698  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullMutexReadOnlyMap                     avgt    5    1054.680 ±   730.055  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullSingleThreadDispatcher               avgt    5      29.371 ±    11.110  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullSingleThreadDispatcherReadOnlyMap    avgt    5   13232.173 ±  2219.482  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullSuspendedLazy                        avgt    5      16.410 ±     5.788  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullSynchronized                         avgt    5      12.340 ±     2.728  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailOrNullSynchronizedReadOnlyMap              avgt    5    8037.048 ±  2130.869  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailSingleThreadDispatcher                     avgt    5      19.679 ±     3.180  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailSingleThreadDispatcherReadOnlyMap          avgt    5      12.213 ±     0.939  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailSuspendedLazy                              avgt    5       2.418 ±     0.288  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailSynchronized                               avgt    5       6.116 ±     0.835  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailSynchronizedReadOnlyMap                    avgt    5       1.972 ±     0.505  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsCached                                    avgt    5    4970.666 ±  2484.428  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsConcurrentMap                             avgt    5    1260.971 ±   708.362  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsMutex                                     avgt    5    4193.619 ±  1151.660  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsMutexReadOnlyMap                          avgt    5       0.891 ±     0.118  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsSingleThreadDispatcher                    avgt    5    7925.860 ±  1392.910  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsSingleThreadDispatcherReadOnlyMap         avgt    5     893.816 ±   256.775  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsSuspendedLazy                             avgt    5    3159.567 ±  2704.905  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsSynchronized                              avgt    5    4417.392 ±   905.772  ms/op
+CompanyDetailsRepositoryBenchmark.concurrentGetDetailsSynchronizedReadOnlyMap                   avgt    5       0.841 ±     0.094  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailCached                                   avgt    5       3.314 ±     0.462  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailConcurrentMap                            avgt    5       1.926 ±     0.348  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailMutex                                    avgt    5       2.481 ±     0.371  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailMutexReadOnlyMap                         avgt    5       1.686 ±     0.278  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullCached                             avgt    5      32.116 ±    11.812  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullConcurrentMap                      avgt    5       6.383 ±     1.841  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullMutex                              avgt    5       8.043 ±     1.517  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullMutexReadOnlyMap                   avgt    5   11272.550 ±   881.794  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullSingleThreadDispatcher             avgt    5     327.948 ±    59.643  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullSingleThreadDispatcherReadOnlyMap  avgt    5   31112.306 ±  1868.579  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullSuspendedLazy                      avgt    5      16.955 ±     9.889  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullSynchronized                       avgt    5       7.523 ±     2.403  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailOrNullSynchronizedReadOnlyMap            avgt    5   11801.580 ±  2658.831  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailSingleThreadDispatcher                   avgt    5     314.735 ±    64.833  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailSingleThreadDispatcherReadOnlyMap        avgt    5     277.466 ±    80.118  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailSuspendedLazy                            avgt    5       2.832 ±     0.403  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailSynchronized                             avgt    5       2.211 ±     0.473  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailSynchronizedReadOnlyMap                  avgt    5       1.733 ±     0.232  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsCached                                  avgt    5   30595.166 ±  3467.385  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsConcurrentMap                           avgt    5    7974.399 ±   494.942  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsMutex                                   avgt    5    6908.000 ±  2313.473  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsMutexReadOnlyMap                        avgt    5       0.181 ±     0.020  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsSingleThreadDispatcher                  avgt    5   14017.971 ±  4840.546  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsSingleThreadDispatcherReadOnlyMap       avgt    5    6896.289 ±  2621.760  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsSuspendedLazy                           avgt    5   22988.299 ±  4933.471  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsSynchronized                            avgt    5    6670.039 ±  2218.823  ms/op
+CompanyDetailsRepositoryBenchmark.singleThreadGetDetailsSynchronizedReadOnlyMap                 avgt    5       0.186 ±     0.036  ms/op
+ReflectionBenchmark.atomicCounterCall                                                           avgt    5      50.218 ±     6.942  ms/op
+ReflectionBenchmark.javaReflectionCall                                                          avgt    5     111.285 ±    14.988  ms/op
+ReflectionBenchmark.kotlinReflectionCall                                                        avgt    5     166.662 ±    58.159  ms/op
+ReflectionBenchmark.kotlinReflectionCallWithFinding                                             avgt    5     798.994 ±   125.760  ms/op
+ReflectionBenchmark.nullableValueIncrement                                                      avgt    5      14.230 ±     2.059  ms/op
+ReflectionBenchmark.printingCounterCall                                                         avgt    5     192.040 ±    17.942  ms/op
+ReflectionBenchmark.rawValueIncrement                                                           avgt    5      ≈ 10⁻⁵              ms/op
+ReflectionBenchmark.regularCall                                                                 avgt    5       0.500 ±     1.081  ms/op
+ReflectionBenchmark.simpleKotlinReflectionCall                                                  avgt    5       0.654 ±     0.065  ms/op
+ReflectionBenchmark.suspendingCounterCall                                                       avgt    5      13.037 ±     2.720  ms/op
+ReflectionBenchmark.synchronizedCounterCall                                                     avgt    5      22.529 ±     1.616  ms/op
+StateSynchronizationBenchmark.atomicTest                                                        avgt    5     257.943 ±    26.463  ms/op
+StateSynchronizationBenchmark.limitedDispatcherSwitchingTest                                    avgt    5    8952.662 ±   420.917  ms/op
+StateSynchronizationBenchmark.limitedDispatcherTest                                             avgt    5      46.282 ±     4.315  ms/op
+StateSynchronizationBenchmark.mutableConcurrentListTest                                         avgt    5    2680.584 ±  2183.221  ms/op
+StateSynchronizationBenchmark.mutableListLimitedDispatcherSwitchingTest                         avgt    5   10177.967 ±  1910.568  ms/op
+StateSynchronizationBenchmark.mutableListLimitedDispatcherTest                                  avgt    5     736.813 ±   194.455  ms/op
+StateSynchronizationBenchmark.mutableListMutexTest                                              avgt    5    5197.003 ±   774.016  ms/op
+StateSynchronizationBenchmark.mutableListSynchronizedTest                                       avgt    5    1021.044 ±   313.479  ms/op
+StateSynchronizationBenchmark.mutexTest                                                         avgt    5    2870.236 ±   343.777  ms/op
+StateSynchronizationBenchmark.synchronizedTest                                                  avgt    5     409.594 ±    53.840  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.parallelConcurrentListTest                    avgt    5   67019.492 ± 15060.832  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.parallelMutexTest                             avgt    5   82312.224 ±  2597.247  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.parallelSingleThreadDispatcherTest            avgt    5   78759.868 ±  4243.825  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.parallelSynchronizedTest                      avgt    5   80944.637 ±  8133.756  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.singleConcurrentListTest                      avgt    5  363804.991 ±   521.427  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.singleMutexTest                               avgt    5  346528.379 ±  3388.480  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.singleSingleThreadDispatcherTest              avgt    5  318263.436 ±   786.039  ms/op
+SynchronizedInMemoryDelayedMapRepositoryBenchmark.singleSynchronizedTest                        avgt    5  342406.942 ±  3834.910  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.concurrentListAddingCopyingTest                      avgt    5     112.916 ±     2.205  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.mutexAddingCopyingTest                               avgt    5     450.284 ±     9.686  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.singleConcurrentListAddingCopyingTest                avgt    5  119882.710 ±  1036.794  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.singleMutexAddingCopyingTest                         avgt    5  422826.311 ± 56003.777  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.singleSingleThreadDispatcherAddingCopyingTest        avgt    5  448121.437 ± 15493.419  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.singleSynchronizedAddingCopyingTest                  avgt    5  416990.115 ± 87633.500  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.singleThreadDispatcherAddingCopyingTest              avgt    5     474.028 ±     2.754  ms/op
+SynchronizedInMemoryMapRepositoryBenchmark.synchronizedAddingCopyingTest                        avgt    5     378.055 ±     8.410  ms/op

@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit
 @State(Scope.Benchmark)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode(Mode.AverageTime)
-open class SynchronizedInMemoryIntRepositoryBenchmark {
+open class SynchronizedInMemoryMapRepositoryBenchmark {
 
     @Benchmark
-    fun synchronizedAddingCopyingTest(bh: Blackhole, repo: SynchronizedInMemoryIntRepository) =
+    fun synchronizedAddingCopyingTest(bh: Blackhole, repo: SynchronizedInMemoryMapRepository) =
         runBlocking(Dispatchers.Default) {
             massiveRun(100) {
                 repo.set("key$it", it)
@@ -25,7 +25,7 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
         }
 
     @Benchmark
-    fun singleSynchronizedAddingCopyingTest(bh: Blackhole, repo: SynchronizedInMemoryIntRepository) =
+    fun singleSynchronizedAddingCopyingTest(bh: Blackhole, repo: SynchronizedInMemoryMapRepository) =
         runBlocking {
             repeat(1_000_000) {
                 repo.set("key$it", it)
@@ -36,7 +36,7 @@ open class SynchronizedInMemoryIntRepositoryBenchmark {
         }
 
     @State(Scope.Thread)
-    open class SynchronizedInMemoryIntRepository {
+    open class SynchronizedInMemoryMapRepository {
         private val values = mutableMapOf<String, Int>()
 
         fun getAll() = synchronized(this) {
