@@ -17,7 +17,7 @@ open class ReflectionBenchmark {
 
         @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun increment() = value++
-        
+
 
         @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun decrement() = value--
@@ -25,7 +25,7 @@ open class ReflectionBenchmark {
         @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun get() = value
     }
-    
+
     @Benchmark
     fun simpleKotlinReflectionCall(bh: Blackhole, counter: Counter) {
         repeat(1_000_000) {
@@ -112,7 +112,43 @@ open class ReflectionBenchmark {
         }
         bh.consume(counter)
     }
-    
+
+    @Benchmark
+    fun atomicCounterCall(bh: Blackhole, counter: AtomicCounter) {
+        repeat(1_000_000) {
+            counter.increment()
+            counter.decrement()
+            counter.increment()
+            counter.get()
+        }
+        bh.consume(counter)
+    }
+
+    @State(Scope.Thread)
+    open class AtomicCounter {
+        var value = AtomicInteger(0)
+
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun increment() = value.incrementAndGet()
+
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun decrement() = value.decrementAndGet()
+
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun get() = value
+    }
+
+    @Benchmark
+    fun synchronizedCounterCall(bh: Blackhole, counter: SynchronizedCounter) {
+        repeat(1_000_000) {
+            counter.increment()
+            counter.decrement()
+            counter.increment()
+            counter.get()
+        }
+        bh.consume(counter)
+    }
+
     @State(Scope.Thread)
     open class SynchronizedCounter {
         var value = 0
@@ -130,43 +166,7 @@ open class ReflectionBenchmark {
         @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun get() = synchronized(this) { value }
     }
-    
-    @Benchmark
-    fun synchronizedCounterCall(bh: Blackhole, counter: SynchronizedCounter) {
-        repeat(1_000_000) {
-            counter.increment()
-            counter.decrement()
-            counter.increment()
-            counter.get()
-        }
-        bh.consume(counter)
-    }
-    
-    @State(Scope.Thread)
-    open class AtomicCounter {
-        var value = AtomicInteger(0)
 
-        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
-        fun increment() = value.incrementAndGet()
-
-        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
-        fun decrement() = value.decrementAndGet()
-
-        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
-        fun get() = value
-    }
-    
-    @Benchmark
-    fun atomicCounterCall(bh: Blackhole, counter: AtomicCounter) {
-        repeat(1_000_000) {
-            counter.increment()
-            counter.decrement()
-            counter.increment()
-            counter.get()
-        }
-        bh.consume(counter)
-    }
-    
     @State(Scope.Thread)
     open class PrintingCounter {
         var value = 0
@@ -189,7 +189,7 @@ open class ReflectionBenchmark {
             return value
         }
     }
-    
+
     @Benchmark
     fun printingCounterCall(bh: Blackhole, counter: PrintingCounter) {
         repeat(10_000) {
@@ -200,7 +200,7 @@ open class ReflectionBenchmark {
         }
         bh.consume(counter)
     }
-    
+
     @State(Scope.Thread)
     open class SuspendingCounter {
         var value = 0
@@ -214,7 +214,7 @@ open class ReflectionBenchmark {
         @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         suspend fun get() = value
     }
-    
+
     @Benchmark
     fun suspendingCounterCall(bh: Blackhole, counter: SuspendingCounter) = runBlocking {
         repeat(1_000_000) {

@@ -227,7 +227,6 @@ open class CompanyDetailsRepositoryBenchmark {
     @State(Scope.Thread)
     open class ConcurrentMapCompanyDetailsRepository : CompanyDetailsRepository {
         private var details = ConcurrentHashMap<Company, CompanyDetails>()
-        private val lock = Any()
 
         override suspend fun getDetails(company: Company): CompanyDetails {
             val current = getDetailsOrNull(company)
@@ -244,12 +243,12 @@ open class CompanyDetailsRepositoryBenchmark {
         override suspend fun getReadyDetails(): Map<Company, CompanyDetails> =
             details.toMap()
 
-        override suspend fun setAllDetails(details: Map<Company, CompanyDetails>) = synchronized(lock) {
+        override suspend fun setAllDetails(details: Map<Company, CompanyDetails>) {
             this.details = ConcurrentHashMap(details)
         }
 
-        fun clear() = synchronized(lock) {
-            details.clear()
+        fun clear() {
+            details = ConcurrentHashMap()
         }
     }
 
@@ -541,7 +540,7 @@ open class CompanyDetailsRepositoryBenchmark {
 
     fun concurrentGetDetail(bh: Blackhole, repo: CompanyDetailsRepository) = runBlocking(Dispatchers.Default) {
         massiveRun(10) {
-            repo.getDetails(Company("company$it"))
+            bh.consume(repo.getDetails(Company("company$it")))
         }
     }
 
@@ -562,14 +561,14 @@ open class CompanyDetailsRepositoryBenchmark {
     fun singleThreadGetDetailOrNull(bh: Blackhole, repo: CompanyDetailsRepository) = runBlocking {
         repo.setAllDetails(prefilledDetails)
         repeat(10_000) {
-            bh.consume(repo.getDetails(Company("company$it")))
+            bh.consume(repo.getDetailsOrNull(Company("company$it")))
         }
     }
 
     fun concurrentGetDetailOrNull(bh: Blackhole, repo: CompanyDetailsRepository) = runBlocking(Dispatchers.Default) {
         repo.setAllDetails(prefilledDetails)
         massiveRun(10) {
-            bh.consume(repo.getDetails(Company("company$it")))
+            bh.consume(repo.getDetailsOrNull(Company("company$it")))
         }
     }
 

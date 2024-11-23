@@ -20,30 +20,33 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
                 repo.set("key$it", it)
             }
             massiveRun(1) {
-                bh.consume(repo.getAll())
+                require(repo.getAll().size == 100_000)
             }
         }
 
     @Benchmark
     fun singleSynchronizedAddingCopyingTest(bh: Blackhole, repo: SynchronizedInMemoryMapRepository) =
         runBlocking {
-            repeat(1_000_000) {
+            repeat(100_000) {
                 repo.set("key$it", it)
             }
-            repeat(10_000) {
-                bh.consume(repo.getAll())
+            repeat(1_000) {
+                require(repo.getAll().size == 100_000)
             }
         }
 
     @State(Scope.Thread)
     open class SynchronizedInMemoryMapRepository {
         private val values = mutableMapOf<String, Int>()
+        private val lock = Any()
 
-        fun getAll() = synchronized(this) {
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun getAll() = synchronized(lock) {
             values.values.toList()
         }
 
-        fun set(key: String, value: Int) = synchronized(this) {
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun set(key: String, value: Int) = synchronized(lock) {
             values[key] = value
         }
     }
@@ -55,18 +58,18 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
                 repo.set("key$it", it)
             }
             massiveRun(1) {
-                bh.consume(repo.getAll())
+                require(repo.getAll().size == 100_000)
             }
         }
 
     @Benchmark
     fun singleMutexAddingCopyingTest(bh: Blackhole, repo: MutexInMemoryIntRepository) =
         runBlocking {
-            repeat(1_000_000) {
+            repeat(100_000) {
                 repo.set("key$it", it)
             }
-            repeat(10_000) {
-                bh.consume(repo.getAll())
+            repeat(1_000) {
+                require(repo.getAll().size == 100_000)
             }
         }
 
@@ -75,10 +78,12 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
         private val values = mutableMapOf<String, Int>()
         private val mutex = kotlinx.coroutines.sync.Mutex()
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         suspend fun getAll() = mutex.withLock {
             values.values.toList()
         }
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         suspend fun set(key: String, value: Int) = mutex.withLock {
             values[key] = value
         }
@@ -91,18 +96,18 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
                 repo.set("key$it", it)
             }
             massiveRun(1) {
-                bh.consume(repo.getAll())
+                require(repo.getAll().size == 100_000)
             }
         }
 
     @Benchmark
     fun singleSingleThreadDispatcherAddingCopyingTest(bh: Blackhole, repo: SingleThreadDispatcherInMemoryIntRepository) =
         runBlocking {
-            repeat(1_000_000) {
+            repeat(100_000) {
                 repo.set("key$it", it)
             }
-            repeat(10_000) {
-                bh.consume(repo.getAll())
+            repeat(1_000) {
+                require(repo.getAll().size == 100_000)
             }
         }
 
@@ -111,10 +116,12 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
         private val values = mutableMapOf<String, Int>()
         private val dispatcher = Dispatchers.Default.limitedParallelism(1)
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         suspend fun getAll() = withContext(dispatcher) {
             values.values.toList()
         }
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         suspend fun set(key: String, value: Int) = withContext(dispatcher) {
             values[key] = value
         }
@@ -127,18 +134,18 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
                 repo.set("key$it", it)
             }
             massiveRun(1) {
-                bh.consume(repo.getAll())
+                require(repo.getAll().size == 100_000)
             }
         }
 
     @Benchmark
     fun singleConcurrentListAddingCopyingTest(bh: Blackhole, repo: ConcurrentListInMemoryIntRepository) =
         runBlocking {
-            repeat(1_000_000) {
+            repeat(100_000) {
                 repo.set("key$it", it)
             }
-            repeat(10_000) {
-                bh.consume(repo.getAll())
+            repeat(1_000) {
+                require(repo.getAll().size == 100_000)
             }
         }
 
@@ -146,10 +153,10 @@ open class SynchronizedInMemoryMapRepositoryBenchmark {
     open class ConcurrentListInMemoryIntRepository {
         private val values = ConcurrentHashMap<String, Int>()
 
-        fun getAll() {
-            values.values.toList()
-        }
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+        fun getAll() = values.values.toList()
 
+        @CompilerControl(CompilerControl.Mode.DONT_INLINE)
         fun set(key: String, value: Int) {
             values[key] = value
         }
